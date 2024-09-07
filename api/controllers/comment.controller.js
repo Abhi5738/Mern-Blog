@@ -1,0 +1,28 @@
+const { errorHandler } = require("../utils/error");
+const Comment = require("../models/comment.model");
+
+exports.createComment = async (req, res, next) => {
+  try {
+    const { content, userId, postId } = req.body;
+
+    if (!content) {
+      return next(errorHandler(403, "Plz provi  "));
+    }
+
+    if (userId !== req.user.id) {
+      return next(
+        errorHandler(403, "You are not allowed to create this comment ")
+      );
+    }
+
+    const newComment = await Comment({
+      content,
+      userId,
+      postId,
+    });
+    await newComment.save();
+    res.status(200).json(newComment);
+  } catch (error) {
+    next(error);
+  }
+};

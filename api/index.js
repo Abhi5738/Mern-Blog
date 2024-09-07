@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const userRoutes = require("./routes/user.route");
 const authRoutes = require("./routes/auth.route");
 const postRoutes = require("../api/routes/post.route");
+const commentRoutes = require("../api/routes/comment.route");
 const cors = require("cors");
 const CookieParser = require("cookie-parser");
 
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port :${PORT} !`);
