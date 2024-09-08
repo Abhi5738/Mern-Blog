@@ -8,5 +8,6 @@ router.put("/update/:userId", VerifyToken, userController.updateUser);
 router.delete("/delete/:userId", VerifyToken, userController.deleteUser);
 router.post("/signout/", VerifyToken, userController.signOut);
 router.get("/getuser", VerifyToken, userController.getUser);
+router.get("/getuser/:userId", userController.getUserById);
 
 module.exports = router;
