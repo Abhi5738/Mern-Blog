@@ -69,7 +69,7 @@ const Comment = ({ comment, onLike, onEdit, onDelete }) => {
         {isEditing ? (
           <div className="border border-teal-500 p-3 rounded-sm">
             <Textarea
-              maxLength={200}
+              maxLength="200"
               className="mb-2"
               value={editedContent}
               onChange={(e) => setEditedContent(e.target.value)}
