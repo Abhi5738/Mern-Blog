@@ -1,7 +1,7 @@
 import { Alert, Button, Textarea } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Comment from "./Comment";
 
 const CommentSection = ({ postId }) => {
@@ -9,6 +9,7 @@ const CommentSection = ({ postId }) => {
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [commentError, setCommentError] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,6 +46,38 @@ const CommentSection = ({ postId }) => {
     };
     getComments();
   }, [postId]);
+
+  const handleLike = async (commentId) => {
+    try {
+      if (!currentUser) {
+        navigate("/sign-in");
+        return;
+      }
+      const response = await fetch(`/api/comment/likeComment/${commentId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : comment
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
@@ -113,7 +146,13 @@ const CommentSection = ({ postId }) => {
             </div>
           </div>
           {comments.map((comment) => {
-            return <Comment key={comment._id} comment={comment} />;
+            return (
+              <Comment
+                key={comment._id}
+                comment={comment}
+                onLike={handleLike}
+              />
+            );
           })}
         </>
       )}
