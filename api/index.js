@@ -9,6 +9,7 @@ const postRoutes = require("../api/routes/post.route");
 const commentRoutes = require("../api/routes/comment.route");
 const cors = require("cors");
 const CookieParser = require("cookie-parser");
+const path = require("path");
 
 app.use(cors()); // Enable CORS for all routes
 
@@ -29,8 +30,10 @@ mongoose
     console.error("Error connecting to MongoDB:", err);
   });
 
-app.get("/", (req, res) => {
-  res.send("Hello Api Working Continue... !");
+__dirname = path.resolve();
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port :${PORT} !`);
 });
 
 app.use("/api/user", userRoutes);
@@ -38,8 +41,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/comment", commentRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port :${PORT} !`);
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 app.use((err, req, res, next) => {
