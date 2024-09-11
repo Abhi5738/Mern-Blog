@@ -1,5 +1,4 @@
 const User = require("../models/user.model");
-const { post } = require("../routes/user.route");
 const { errorHandler } = require("../utils/error");
 const bcryptjs = require("bcrypt");
 
@@ -8,68 +7,6 @@ exports.user = (req, res) => {
     message: "User details",
   });
 };
-
-// exports.updateUser = async (req, res, next) => {
-//   const { username, email, password, profilePicture } = req.body;
-
-//   const updateUserId = req.params.userId;
-
-//   const existingUser = req.user;
-
-//   if (updateUserId !== existingUser.id) {
-//     return res.json(
-//       errorHandler(401, "You are not allowed to update this user")
-//     );
-//   }
-
-//   if (password) {
-//     if (password.length < 6) {
-//       return res.json(
-//         errorHandler(401, "Password must be at least 6 characters ")
-//       );
-//     }
-//   }
-
-//   const hashPassword = bcryptjs.hashSync(password || "Abhi", 10);
-
-//   if (username) {
-//     if (username.length < 7 || username.length > 20) {
-//       return res.json(
-//         errorHandler(401, "Username must be between 7 and 20 characters")
-//       );
-//     }
-//     if (username.includes(" ")) {
-//       return res.json(errorHandler(401, "Username cannot container spaces "));
-//     }
-//     if (username !== username.toLowerCase()) {
-//       return res.json(errorHandler(401, "Username must be lowercase "));
-//     }
-//     if (!username.match(/^[a-zA-Z0-9]+$/)) {
-//       return res.json(
-//         errorHandler(401, "Username can only container letter and numbers ")
-//       );
-//     }
-//   }
-
-//   try {
-//     const updatedUser = await User.findByIdAndUpdate(
-//       updateUserId,
-//       {
-//         $set: {
-//           username: username,
-//           email: email,
-//           password: hashPassword,
-//           profilePicture: profilePicture,
-//         },
-//       },
-//       { new: true }
-//     );
-//     const { password, ...rest } = updatedUser._doc;
-//     res.json({ user: rest, message: "Update Success " });
-//   } catch (error) {
-//     return res.status(400).json({ success: false, message: error.message });
-//   }
-// };
 
 exports.updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
